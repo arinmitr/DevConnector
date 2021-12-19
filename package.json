@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "supervisor server"
+    "server": "supervisor server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Arindam Mitra",
   "license": "ISC",
@@ -13,7 +15,6 @@
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
-    "create-react-app": "^5.0.0",
     "eslint": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
