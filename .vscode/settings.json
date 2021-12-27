@@ -4,6 +4,7 @@
         "devconnector",
         "fieldofstudy",
         "githubusername",
-        "middlewares"
+        "middlewares",
+        "uuidv"
     ]
 }

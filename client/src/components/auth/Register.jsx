@@ -1,6 +1,9 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-export const Register = () => {
+import {Link, Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
+import { setAlert } from '../../actions/alert'
+import { register } from '../../actions/auth'
+export const Register = (props) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -11,14 +14,17 @@ export const Register = () => {
 
     const onChangeHandler = e => setFormData({ ...formData, [e.target.name]: e.target.value})
 
-    const onSubmitHandler = async e => {
+    const onSubmitHandler = e => {
         e.preventDefault()
         if(password !== password2) {
-            console.log('Password mismatch')
+            props.setAlert('Password mismatch', 'danger')
         }
         else {
-            console.log('SUCCESS');
+            props.register({name, email, password})
         }
+    }
+    if(props.isAuthenticated) {
+        return <Redirect to="/dashboard" />
     }
     return (
         <React.Fragment>
@@ -26,7 +32,7 @@ export const Register = () => {
             <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
             <form className="form" onSubmit={e => onSubmitHandler(e)}>
                 <div className="form-group">
-                <input type="text" placeholder="Name" name="name" required 
+                <input type="text" placeholder="Name" name="name" 
                 value={name} onChange={e => onChangeHandler(e)}
                 />
                 </div>
@@ -44,7 +50,7 @@ export const Register = () => {
                     type="password"
                     placeholder="Password"
                     name="password"
-                    minLength="6"
+                    // minLength="6"
                     value={password}
                     onChange={e => onChangeHandler(e)}
                 />
@@ -54,7 +60,7 @@ export const Register = () => {
                     type="password"
                     placeholder="Confirm Password"
                     name="password2"
-                    minLength="6"
+                    // minLength="6"
                     value={password2}
                     onChange={e => onChangeHandler(e)}
                 />
@@ -67,5 +73,8 @@ export const Register = () => {
         </React.Fragment>
     )
 }
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
 
-export default Register
+export default connect(mapStateToProps, {setAlert, register})(Register)

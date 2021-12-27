@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-export const Login = () => {
+import {Link, Redirect} from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login } from '../../actions/auth'
+export const Login = (props) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -9,17 +11,18 @@ export const Login = () => {
 
     const onChangeHandler = e => setFormData({ ...formData, [e.target.name]: e.target.value})
 
-    const onSubmitHandler = async e => {
+    const onSubmitHandler = e => {
         e.preventDefault()
-        
-            console.log('SUCCESS');
-        
+        props.login({email, password})
+    }
+    if(props.isAuthenticated) {
+        return <Redirect to="/dashboard" />
     }
     return (
         <React.Fragment>
             <h1 className="large text-primary">Sign In</h1>
             <p className="lead"><i className="fas fa-user"></i> Log Into Your Account</p>
-            <form className="form" onSubmit={e => onSubmitHandler(e)}>
+            <form className="form" onSubmit={onSubmitHandler}>
                 <div className="form-group">
                 <input type="email" placeholder="Email Address" name="email" 
                 value={email} onChange={e => onChangeHandler(e)}
@@ -35,7 +38,6 @@ export const Login = () => {
                     onChange={e => onChangeHandler(e)}
                 />
                 </div>
-                
                 <input type="submit" className="btn btn-primary" value="Login" />
             </form>
             <p className="my-1">
@@ -45,4 +47,7 @@ export const Login = () => {
     )
 }
 
-export default Login
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+export default connect(mapStateToProps, ({login}))(Login)
