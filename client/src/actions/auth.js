@@ -8,6 +8,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    CLEAR_PROFILE,
 } from '../actions/types'
 import setAuthToken from '../utils/setAuthToken'
 
@@ -91,8 +92,10 @@ export const login =
         }
     }
 
-// Logout User
+// Logout User / Clear Profile
 
 export const logout = () => (dispatch) => {
+    dispatch({ type: CLEAR_PROFILE })
     dispatch({ type: LOGOUT })
+    dispatch(setAlert('Logged out successfully.', 'success'))
 }
